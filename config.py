@@ -2,6 +2,8 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 import psycopg2
 
+
+
 app = Flask(__name__)
 
 app.config['JWT_SECRET_KEY'] = b'\xd3\x9e0\x8a\xb6j_v\xc8\x91\xc2A\x11w)\xd0@\x0e\x12\n\xac\t\xfb)'  

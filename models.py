@@ -23,7 +23,6 @@ def register():
     conn = get_db_connection()
     if conn is None:
         return jsonify({'message': 'Could not connect to the database'}), 500
-    
     try:
         cur = conn.cursor()
         cur.execute('''INSERT INTO "User" (username, password, email, role, group_id) VALUES (%s, %s, %s, %s, %s)''', (username, hashed_password, email, role, group_id))

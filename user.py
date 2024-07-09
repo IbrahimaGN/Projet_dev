@@ -12,6 +12,9 @@ def user_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
+
+
+
 #creation d'un blueprint
 user= Blueprint("user", __name__)
 

@@ -17,7 +17,6 @@ def admin():
     return jsonify({"msg": f"Bienvenue, {current_user['username']}"}), 200
 
 
-
 # Route pour register
 @admin.route('/register', methods=['POST'])
 @admin_required
