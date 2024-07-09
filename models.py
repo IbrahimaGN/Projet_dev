@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-app.config['JWT_SECRET_KEY'] = 'super-secret'  # Change this!
+app.config['JWT_SECRET_KEY'] = 'super-secret'  
 jwt = JWTManager(app)
 
 # Connect to the database
@@ -76,6 +76,33 @@ def login():
         return jsonify(access_token=access_token), 200
     else:
         return jsonify({'message': 'Invalid credentials'}), 401
+
+def admin_required(fn):
+    @jwt_required()
+    def wrapper(*args, **kwargs):
+        current_user = get_jwt_identity()
+        if current_user['role'] != 'admin':
+            return jsonify({"msg": "Accès interdit"}), 403
+        return fn(*args, **kwargs)
+    return wrapper
+
+
+
+@app.route('/admin', methods=['GET'])
+@admin_required
+def admin():
+    current_user = get_jwt_identity()
+    return jsonify({"msg": f"Bienvenue, {current_user['username']}"}), 200
+
+
+
+@app.route('/user', methods=['GET'])
+@jwt_required()
+def user():
+    current_user = get_jwt_identity()
+    return jsonify({"msg": f"Bienvenue, {current_user['username']}"}), 200
+
+
 
 # Lancer l'app
 if __name__ == '__main__':

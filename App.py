@@ -14,9 +14,8 @@ app.config['DATABASE'] = {
     'port': 5432
 }
 
-
 # Configuration de JWT
-app.config['JWT_SECRET_KEY'] = 'votre_clé_secrète'  # Changez ceci par une clé secrète sécurisée
+app.config['JWT_SECRET_KEY'] = 'votre_clé_secrète' # Changez ceci par une clé secrète sécurisée
 jwt = JWTManager(app)
 
 
