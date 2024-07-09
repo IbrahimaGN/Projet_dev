@@ -1,12 +1,14 @@
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from init import admin_bp
+from admin import admin_bp
 from config import get_db_connection
+from functools import wraps
 import psycopg2
 from werkzeug.security import generate_password_hash
 
 # Fonction de décoration pour vérifier le rôle admin
 def admin_required(fn):
+    @wraps(fn)
     @jwt_required()
     def wrapper(*args, **kwargs):
         current_user = get_jwt_identity()

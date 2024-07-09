@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
-from init import auth_bp
+from auth import auth_bp
 from config import get_db_connection
 import psycopg2
 from werkzeug.security import check_password_hash
@@ -22,6 +22,7 @@ def login():
         return jsonify(access_token=access_token)
     else:
         return jsonify({"msg": "Nom d'utilisateur ou mot de passe incorrect"}), 401
+
 
 #login 
 @auth_bp.route('/login', methods=['POST'])
