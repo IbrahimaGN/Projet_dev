@@ -1,27 +1,9 @@
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
 from auth import auth_bp
-from config import get_db_connection
+from config import *
 import psycopg2
 from werkzeug.security import check_password_hash
-
-
-@auth_bp.route('/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
-    user = cur.fetchone()
-    cur.close()
-    conn.close()
-    if user:
-        access_token = create_access_token(identity={'username': user[1], 'role': user[3]})
-        return jsonify(access_token=access_token)
-    else:
-        return jsonify({"msg": "Nom d'utilisateur ou mot de passe incorrect"}), 401
 
 
 #login 

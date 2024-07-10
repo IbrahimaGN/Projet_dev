@@ -45,6 +45,7 @@ def create_user():
     return jsonify({'message': 'Registered successfully'}), 200
 
 
+
 @admin_bp.route('/create_group', methods=['POST'])
 @admin_required
 def create_group():

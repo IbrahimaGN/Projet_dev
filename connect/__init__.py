@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-admin_bp = Blueprint('admin', __name__)
+connect_bp = Blueprint('connect', __name__)
 
 from . import routes
 
