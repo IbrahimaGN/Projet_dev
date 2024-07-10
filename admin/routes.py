@@ -94,3 +94,25 @@ def delete_prompt(id):
     cur.close()
     conn.close()
     return jsonify({"msg": "Prompt supprimé"}), 200
+
+
+
+@admin_bp.route('/view_all_prompts', methods=['GET'])
+@admin_required
+def view_all_prompts():
+    conn = get_db_connection()
+    if conn is None:
+        return jsonify({'message': 'Impossible de se connecter à la base de données'}), 500
+
+    try:
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM prompt')
+        prompts = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        return jsonify(prompts), 200
+
+    except psycopg2.Error as e:
+        print(f"Une erreur s'est produite: {e}")
+        return jsonify({"msg": "Erreur lors de la récupération des prompts", "error": str(e)}), 500
