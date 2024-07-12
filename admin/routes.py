@@ -13,7 +13,7 @@ def admin_required(fn):
     def wrapper(*args, **kwargs):
         current_user = get_jwt_identity()
         if current_user['role'] != 'admin':
-            return jsonify({"msg": "Accès interdit"}), 403
+            return jsonify({"msg": "Acces interdit"}), 403
         return fn(*args, **kwargs)
     return wrapper
 
@@ -57,7 +57,7 @@ def create_group():
 
     conn = get_db_connection()
     if conn is None:
-        return jsonify({'message': 'Impossible de se connecter à la base de données'}), 500
+        return jsonify({'message': 'Impossible de se connecter a la base de donnees'}), 500
 
     try:
         cur = conn.cursor()
@@ -69,8 +69,8 @@ def create_group():
         return jsonify({"msg": "Groupe creer avec succes"}), 201
 
     except psycopg2.Error as e:
-        print(f"Une erreur s'est produite: {e}")
-        return jsonify({"msg": "Erreur lors de la création du groupe", "error": str(e)}), 500
+        print(f"Une erreur s_est produite: {e}")
+        return jsonify({"msg": "Erreur lors de la creation du groupe", "error": str(e)}), 500
 
 
 @admin_bp.route('/validate_prompt/<int:id>', methods=['POST'])
@@ -82,7 +82,7 @@ def validate_prompt(id):
     conn.commit()
     cur.close()
     conn.close()
-    return jsonify({"msg": "Prompt validé"}), 200
+    return jsonify({"msg": "Prompt valider"}), 200
 
 @admin_bp.route('/delete_prompt/<int:id>', methods=['DELETE'])
 @admin_required
@@ -93,7 +93,7 @@ def delete_prompt(id):
     conn.commit()
     cur.close()
     conn.close()
-    return jsonify({"msg": "Prompt supprimé"}), 200
+    return jsonify({"msg": "Prompt supprimer"}), 200
 
 
 
@@ -102,7 +102,7 @@ def delete_prompt(id):
 def view_all_prompts():
     conn = get_db_connection()
     if conn is None:
-        return jsonify({'message': 'Impossible de se connecter à la base de données'}), 500
+        return jsonify({'message': 'Impossible de se connecter a la base de donnees'}), 500
 
     try:
         cur = conn.cursor()
@@ -114,5 +114,5 @@ def view_all_prompts():
         return jsonify(prompts), 200
 
     except psycopg2.Error as e:
-        print(f"Une erreur s'est produite: {e}")
-        return jsonify({"msg": "Erreur lors de la récupération des prompts", "error": str(e)}), 500
+        print(f"Une erreur s_est produite: {e}")
+        return jsonify({"msg": "Erreur lors de la recuperation des prompts", "error": str(e)}), 500

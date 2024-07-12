@@ -18,7 +18,7 @@ def login():
 
     conn = get_db_connection()
     if conn is None:
-        return jsonify({'message': 'Impossible de se connecter à la base de données'}), 500
+        return jsonify({'message': 'Impossible de se connecter à la base de donnees'}), 500
     
     try:
         cur = conn.cursor()
@@ -35,5 +35,5 @@ def login():
             return jsonify({'message': 'Identifiants invalides'}), 401
 
     except psycopg2.Error as e:
-        print(f"Une erreur s'est produite: {e}")
+        print(f"Une erreur s_est produite: {e}")
         return jsonify({'message': 'Une erreur s\'est produite lors de la connexion'}), 500

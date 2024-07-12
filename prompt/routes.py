@@ -29,8 +29,8 @@ def create_prompt():
         cursor.close()
         conn.close()
     except Exception as e:
-        return jsonify({"msg": "Erreur lors de la création du prompt", "error": str(e)}), 500
+        return jsonify({"msg": "Erreur lors de la creation du prompt", "error": str(e)}), 500
 
-    return jsonify({"msg": "Prompt créé avec succès"}), 201
+    return jsonify({"msg": "Prompt creer avec succes"}), 201
 
 
