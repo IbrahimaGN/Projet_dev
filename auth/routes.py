@@ -6,6 +6,8 @@ import psycopg2
 from werkzeug.security import check_password_hash
 
 
+
+
 #login 
 @auth_bp.route('/login', methods=['POST'])
 def login():

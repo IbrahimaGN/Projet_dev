@@ -1,7 +1,3 @@
-
-
-
-
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager
 from config import *
@@ -13,6 +9,7 @@ from prompt import prompt_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
 
 
 @app.route('/consulter/<int:id>', methods=['GET'])
@@ -50,6 +47,8 @@ def buy_prompt(id):
     return jsonify({"msg": f"Achat du prompt avec l'ID {id} effectuer avec succes"}), 200
 
 
+
+
 @app.route('/search', methods=['GET'])
 def search_prompts():
     keyword = request.args.get('keyword')
@@ -67,7 +66,7 @@ def search_prompts():
         conn.close()
 
         if not prompts:
-            return jsonify({"msg": "Aucun prompt trouvé pour ce mot-clé"}), 404
+            return jsonify({"msg": "Aucun prompt trouver pour ce mot_cle"}), 404
 
         prompt_list = [{
             "id": prompt[0],

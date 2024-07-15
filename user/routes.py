@@ -4,6 +4,7 @@ from user import user_bp
 from config import get_db_connection
 import psycopg2
 
+
 @user_bp.route('/propose_prompt', methods=['POST'])
 @jwt_required()
 def propose_prompt():

@@ -2,8 +2,13 @@ from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from prompt import prompt_bp
 from config import *
-
 from psycopg2 import sql
+
+
+
+
+
+
 
 
 
@@ -32,6 +37,3 @@ def create_prompt():
         return jsonify({"msg": "Erreur lors de la creation du prompt", "error": str(e)}), 500
 
     return jsonify({"msg": "Prompt creer avec succes"}), 201
-
-
-

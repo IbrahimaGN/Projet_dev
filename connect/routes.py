@@ -2,6 +2,7 @@ from flask import  jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from connect import connect_bp
 
+
 @connect_bp.route('/connect', methods=['GET'])
 @jwt_required()
 def connect():
