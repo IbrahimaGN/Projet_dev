@@ -1,17 +1,28 @@
 from flask import jsonify, request
+from functools import wraps
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from user import user_bp
 from config import get_db_connection
 import psycopg2
 
+# Fonction de décoration pour vérifier le rôle user
+def user_required(fn):
+    @wraps(fn)
+    @jwt_required()
+    def wrapper(*args, **kwargs):
+        current_user = get_jwt_identity()
+        if current_user['role'] == 'admin':
+            return jsonify({"msg": "Acces interdit"}), 403
+        return fn(*args, **kwargs)
+    return wrapper
 
 @user_bp.route('/propose_prompt', methods=['POST'])
-@jwt_required()
+@user_required
 def propose_prompt():
     data = request.get_json()
     prompt_text = data.get('content')
     price = data.get('price')
-    #current_user = get_jwt_identity()
+    current_user = get_jwt_identity()
     #user_id = current_user['id']
 
     conn = get_db_connection()
@@ -30,20 +41,19 @@ def propose_prompt():
         return jsonify({'message': 'Erreur lors de la proposition du prompt'}), 500
     
 
-
 @user_bp.route('/vote_prompt/<int:id>', methods=['POST'])
-@jwt_required()
+@user_required
 def vote_prompt(id):
     current_user = get_jwt_identity()
 
-        # Vérifier si l'utilisateur est administrateur
-    if current_user.get('role') == 'admin':
-        return jsonify({"msg": "Vous n_etes pas autoriser a noter des prompts en tant qu'administrateur."}), 403
+    # # Vérifier si l'utilisateur est administrateur
+    # if current_user.get('role') == 'admin':
+    #     return jsonify({"msg": "Vous n_etes pas autoriser a noter des prompts en tant qu'administrateur."}), 403
     vote = request.get_json().get('vote_value')
-    username = request.get_json().get('username')
+    #username = request.get_json().get('username')
 
 
-    if vote not in [1, -1]:
+    if vote in [1, -1]:
         return jsonify({"msg": "Vote invalide. Utilisez 1 pour un vote positif et -1 pour un vote negatif."}), 400
 
     conn = get_db_connection()
@@ -67,7 +77,7 @@ def vote_prompt(id):
         prompt_group_id = cur.fetchone()[0]
 
         # Sélectionnez group_id depuis la table User pour l'utilisateur actuel
-        cur.execute('''SELECT username, group_id FROM "User" WHERE username = %s''', (current_user['username'],))
+        cur.execute('''SELECT group_id FROM "User" WHERE username = %s''', (current_user['username'],))
         user_group_id = cur.fetchone()[0]
 
         impact = 1
@@ -81,6 +91,10 @@ def vote_prompt(id):
         cur.execute('''SELECT SUM(vote_value) FROM "Vote" WHERE prompt_id = %s''', (id,))
         total_score = cur.fetchone()[0]
 
+        # Si aucun vote n'a été trouvé, définir total_score à 0
+        if total_score is None:
+            total_score = 0
+            
         # Activer le prompt si le score total atteint 6 ou plus
         if total_score >= 6:
             cur.execute('''UPDATE "prompt" SET state = 'activer' WHERE id = %s''', (id,))
@@ -98,12 +112,9 @@ def vote_prompt(id):
 
 
 
-from flask import jsonify, request
-from flask_jwt_extended import jwt_required, get_jwt_identity
-import psycopg2
 
 @user_bp.route('/rate_prompt/<int:id>', methods=['POST'])
-@jwt_required()
+@user_required
 def rate_prompt(id):
     current_user = get_jwt_identity()
 
@@ -169,7 +180,7 @@ def rate_prompt(id):
 
 
 @user_bp.route('/delete_prompt/<int:id>', methods=['DELETE'])
-@jwt_required()
+@user_required
 def delete_prompt(id):
     current_user = get_jwt_identity()
 

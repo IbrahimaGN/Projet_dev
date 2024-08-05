@@ -18,7 +18,7 @@ const HomePage = () => {
 
   return (
     <Container>
-      <center><h1 className="mt-4">Bienvenue sur Khalil's app</h1>
+      <center><h1 className="mt-4">Welcome to Khalil's app</h1>
       <ListGroup className="mt-4">
         {prompts.map(prompt => (
           <ListGroup.Item key={prompt.id}>

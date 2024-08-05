@@ -3,18 +3,25 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from prompt import prompt_bp
 from config import *
 from psycopg2 import sql
+from functools import wraps
 
 
 
-
-
-
-
+# Fonction de décoration pour vérifier le rôle admin
+def user_required(fn):
+    @wraps(fn)
+    @jwt_required()
+    def wrapper(*args, **kwargs):
+        current_user = get_jwt_identity()
+        if current_user['role'] == 'admin':
+            return jsonify({"msg": "Acces interdit"}), 403
+        return fn(*args, **kwargs)
+    return wrapper
 
 
 # Exemple d'une route pour ajouter un prompt
 @prompt_bp.route('/create_prompt', methods=['POST'])
-@jwt_required()
+@user_required
 def create_prompt():
     current_user = get_jwt_identity()
     content = request.json.get('content')

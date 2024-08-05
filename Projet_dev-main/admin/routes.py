@@ -86,16 +86,21 @@ def validate_prompt(id):
     conn.close()
     return jsonify({"msg": "Prompt valider"}), 200
 
+
+
+
+
 @admin_bp.route('/delete_prompt/<int:id>', methods=['DELETE'])
 @admin_required
 def delete_prompt(id):
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('DELETE FROM prompts WHERE id = %s', (id,))
+    cur.execute('DELETE FROM prompt WHERE id = %s', (id,))
     conn.commit()
     cur.close()
     conn.close()
     return jsonify({"msg": "Prompt supprimer"}), 200
+
 
 
 
