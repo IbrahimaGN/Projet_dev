@@ -16,6 +16,7 @@ def user_required(fn):
         return fn(*args, **kwargs)
     return wrapper
 
+
 @user_bp.route('/propose_prompt', methods=['POST'])
 @user_required
 def propose_prompt():
@@ -53,7 +54,7 @@ def vote_prompt(id):
     #username = request.get_json().get('username')
 
 
-    if vote in [1, -1]:
+    if vote not in [1, -1]:
         return jsonify({"msg": "Vote invalide. Utilisez 1 pour un vote positif et -1 pour un vote negatif."}), 400
 
     conn = get_db_connection()
